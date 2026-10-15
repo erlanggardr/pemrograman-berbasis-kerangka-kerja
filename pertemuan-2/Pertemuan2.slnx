@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HelloWorld/HelloWorld.csproj" />
+  <Project Path="SistemDataMahasiswa/SistemDataMahasiswa.csproj" />
+</Solution>
