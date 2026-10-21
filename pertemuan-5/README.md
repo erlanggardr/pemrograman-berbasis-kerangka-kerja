@@ -44,7 +44,7 @@ pertemuan-5/
 │   ├── App.xaml                            # Deklarasi startup aplikasi
 │   ├── App.xaml.cs                         # Kode bootstrap aplikasi WPF
 │   ├── Models/
-│   │   └── Student.cs                      # Model data entitas Mahasiswa
+│   │   └── Student.cs                      # Model entitas Mahasiswa (turunan ViewModelBase / INotifyPropertyChanged)
 │   ├── ViewModels/
 │   │   ├── ViewModelBase.cs                # Kelas basis pengimplementasi INotifyPropertyChanged
 │   │   ├── RelayCommand.cs                 # Implementasi antarmuka ICommand untuk aksi tombol

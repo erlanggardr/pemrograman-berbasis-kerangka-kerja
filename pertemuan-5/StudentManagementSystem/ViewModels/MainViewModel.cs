@@ -29,6 +29,8 @@ namespace StudentManagementSystem.ViewModels
                 if (SetProperty(ref _selectedStudent, value))
                 {
                     OnPropertyChanged(nameof(IsStudentSelected));
+                    (EditCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (DeleteCommand as RelayCommand)?.RaiseCanExecuteChanged();
                     if (value != null && !IsEditMode)
                     {
                         StatusMessage = $"Memilih: {value.Nama} ({value.NRP}) — IPK: {value.IPKFormat}";

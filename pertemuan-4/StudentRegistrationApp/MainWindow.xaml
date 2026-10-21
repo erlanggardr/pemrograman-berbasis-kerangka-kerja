@@ -152,9 +152,27 @@
                             <TextBlock Text="Pilih salah satu baris untuk melihat detail atau menghapus data." FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
                         </StackPanel>
                         <!-- Search Box -->
-                        <TextBox x:Name="txtSearch" Grid.Column="1" Height="34" Padding="10,6" FontSize="12"
-                                 BorderBrush="#CBD5E1" VerticalContentAlignment="Center"
-                                 TextChanged="TxtSearch_TextChanged"/>
+                        <Grid Grid.Column="1" VerticalAlignment="Center">
+                            <TextBox x:Name="txtSearch" Height="34" Padding="26,6,8,6" FontSize="12"
+                                     BorderBrush="#CBD5E1" VerticalContentAlignment="Center"
+                                     TextChanged="TxtSearch_TextChanged"
+                                     ToolTip="Cari berdasarkan NRP, Nama, atau Program Studi"/>
+                            <TextBlock Text="🔍" FontSize="11" Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                       IsHitTestVisible="False" Foreground="#94A3B8"/>
+                            <TextBlock Text="Cari NRP, Nama, Prodi..." FontSize="12" Margin="28,0,0,0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#94A3B8">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=txtSearch}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
                     </Grid>
 
                     <!-- DataGrid -->

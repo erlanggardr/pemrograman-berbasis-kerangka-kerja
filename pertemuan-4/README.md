@@ -80,23 +80,17 @@ dotnet run --project StudentRegistrationApp
 ## 🛠️ Rincian Proyek & Penjelasan Kode
 
 ### 1. Model Entitas (`Models/Mahasiswa.cs`)
-Mendefinisikan atribut mahasiswa lengkap dengan properti pembantu pemformatan tanggal:
+Mendefinisikan entitas mahasiswa pengimplementasi antarmuka `INotifyPropertyChanged` lengkap dengan properti pemformatan tanggal:
 
 ```csharp
 namespace StudentRegistrationApp.Models
 {
-    public class Mahasiswa
+    public class Mahasiswa : INotifyPropertyChanged
     {
-        public string NRP { get; set; } = string.Empty;
-        public string Nama { get; set; } = string.Empty;
-        public string Prodi { get; set; } = string.Empty;
-        public string JenisKelamin { get; set; } = string.Empty;
-        public DateTime TanggalLahir { get; set; }
-        public int Angkatan { get; set; }
-        public string JalurMasuk { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public DateTime TanggalRegistrasi { get; set; } = DateTime.Now;
-
+        public event PropertyChangedEventHandler? PropertyChanged;
+        // Proper encapsulation dengan event OnPropertyChanged()
+        public string NRP { get => _nrp; set { ... OnPropertyChanged(); } }
+        public string Nama { get => _nama; set { ... OnPropertyChanged(); } }
         public string TanggalLahirFormat => TanggalLahir.ToString("dd/MM/yyyy");
         // ...
     }

@@ -16,11 +16,12 @@ Aplikasi mencakup fitur:
 3. **Reset & Koreksi Input**:
    * Tombol **`C`** (*Clear All*): Mengosongkan seluruh operan, operator, dan ekspresi aktif.
    * Tombol **`CE`** (*Clear Entry*): Mengosongkan angka yang sedang diinputkan tanpa menghapus operan sebelumnya.
-   * Tombol **`⌫`** (*Backspace*): Menghapus karakter digit terakhir pada layar.
+   * Tombol **`DEL`** (*Backspace / Delete*): Menghapus karakter digit terakhir pada layar.
 4. **Error Handling & Keamanan Komputasi**:
    * Penanganan pembagian dengan nol (*Division by Zero*) menggunakan blok `try-catch`.
+   * Penanganan overflow komputasi ketika hasil melebihi batas angka floating point.
    * Menampilkan dialog pesan peringatan ramah pengguna via `MessageBox.Show` dan status display bertuliskan `Error` guna mencegah *runtime crash*.
-5. **Dukungan Keyboard (*Keyboard Shortcuts*)**: Pengguna dapat mengoperasikan kalkulator langsung dari keyboard (tombol angka, `+`, `-`, `*`, `/`, `Enter` untuk samadengan, `Escape` untuk Clear, `Backspace`, dan titik desimal).
+5. **Dukungan Keyboard (*Keyboard Shortcuts*)**: Pengguna dapat mengoperasikan kalkulator langsung dari keyboard laptop maupun desktop (tombol angka 0-9, `Shift`+`=` atau `+`, `-`, `Shift`+`8` atau `*`, `/`, `Enter` atau `=` untuk samadengan, `Escape` untuk Clear, `Backspace` untuk DEL, serta titik desimal).
 
 ---
 
@@ -124,19 +125,32 @@ Pengguna dapat mengetik secara natural menggunakan tombol fisik keyboard atau nu
 ```csharp
 protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 {
-    switch (keyData)
+    bool hasShift = (keyData & Keys.Shift) == Keys.Shift;
+    Keys keyCode = keyData & Keys.KeyCode;
+
+    if (hasShift)
     {
-        case Keys.D0 or Keys.NumPad0: btn0.PerformClick(); return true;
-        case Keys.D1 or Keys.NumPad1: btn1.PerformClick(); return true;
-        // ... (digit 2-9)
-        case Keys.Oemplus or Keys.Add: btnAdd.PerformClick(); return true;
-        case Keys.OemMinus or Keys.Subtract: btnSub.PerformClick(); return true;
-        case Keys.Multiply: btnMul.PerformClick(); return true;
-        case Keys.Divide: btnDiv.PerformClick(); return true;
-        case Keys.Enter: btnEquals.PerformClick(); return true;
-        case Keys.Escape: btnClear.PerformClick(); return true;
-        case Keys.Back: btnBackspace.PerformClick(); return true;
-        case Keys.Decimal or Keys.OemPeriod: btnDot.PerformClick(); return true;
+        switch (keyCode)
+        {
+            case Keys.Oemplus: btnAdd.PerformClick(); return true; // Shift + = adalah '+'
+            case Keys.D8: btnMul.PerformClick(); return true;      // Shift + 8 adalah '*'
+        }
+    }
+    else
+    {
+        switch (keyCode)
+        {
+            case Keys.D0 or Keys.NumPad0: btn0.PerformClick(); return true;
+            // ... (digit 1-9)
+            case Keys.Add: btnAdd.PerformClick(); return true;
+            case Keys.OemMinus or Keys.Subtract: btnSub.PerformClick(); return true;
+            case Keys.Multiply: btnMul.PerformClick(); return true;
+            case Keys.Divide or Keys.OemQuestion: btnDiv.PerformClick(); return true;
+            case Keys.Enter or Keys.Oemplus: btnEquals.PerformClick(); return true; // Enter atau '='
+            case Keys.Escape: btnClear.PerformClick(); return true;
+            case Keys.Back: btnBackspace.PerformClick(); return true;
+            case Keys.Decimal or Keys.OemPeriod or Keys.Oemcomma: btnDot.PerformClick(); return true;
+        }
     }
     return base.ProcessCmdKey(ref msg, keyData);
 }

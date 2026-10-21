@@ -186,9 +186,26 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBox Grid.Column="0" Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                                     Height="32" Padding="8,4" FontSize="12" VerticalContentAlignment="Center"
-                                     ToolTip="Cari berdasarkan NRP, Nama, atau Email"/>
+                            <Grid Grid.Column="0">
+                                <TextBox x:Name="txtSearch" Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="32" Padding="24,4,8,4" FontSize="12" VerticalContentAlignment="Center"
+                                         ToolTip="Cari berdasarkan NRP, Nama, atau Email"/>
+                                <TextBlock Text="🔍" FontSize="11" Margin="6,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                           IsHitTestVisible="False" Foreground="#94A3B8"/>
+                                <TextBlock Text="Cari NRP, Nama, Email..." FontSize="12" Margin="26,0,0,0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="False" Foreground="#94A3B8">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=txtSearch}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
 
                             <ComboBox Grid.Column="2" ItemsSource="{Binding FilterProdiList}"
                                       SelectedItem="{Binding SelectedFilterProdi}" Height="32" FontSize="12"
@@ -220,12 +237,12 @@
                                   Background="White">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="NRP" Binding="{Binding NRP}" Width="100" FontWeight="SemiBold"/>
-                                <DataGridTextColumn Header="Nama Lengkap" Binding="{Binding Nama}" Width="160"/>
-                                <DataGridTextColumn Header="Program Studi" Binding="{Binding Prodi}" Width="140"/>
+                                <DataGridTextColumn Header="Nama Lengkap" Binding="{Binding Nama}" Width="165"/>
+                                <DataGridTextColumn Header="Program Studi" Binding="{Binding Prodi}" Width="150"/>
                                 <DataGridTextColumn Header="Angkatan" Binding="{Binding Angkatan}" Width="65"/>
                                 <DataGridTextColumn Header="IPK" Binding="{Binding IPKFormat}" Width="55" FontWeight="Bold"/>
-                                <DataGridTextColumn Header="Predikat" Binding="{Binding Predikat}" Width="100"/>
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="70"/>
+                                <DataGridTextColumn Header="Predikat" Binding="{Binding Predikat}" Width="135"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="75"/>
                                 <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>

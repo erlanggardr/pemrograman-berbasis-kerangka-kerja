@@ -89,13 +89,6 @@ namespace StudentRegistrationApp
                 return;
             }
 
-            if (_masterList.Any(m => m.NRP.Equals(nrp, StringComparison.OrdinalIgnoreCase)))
-            {
-                ShowWarning($"Mahasiswa dengan NRP {nrp} sudah terdaftar dalam sistem!", "Duplikasi NRP");
-                txtNRP.Focus();
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(nama))
             {
                 ShowWarning("Nama lengkap mahasiswa tidak boleh kosong!", "Validasi Input");
@@ -129,6 +122,45 @@ namespace StudentRegistrationApp
                 ShowWarning("Format email tidak valid! Gunakan format email yang benar (contoh: nama@domain.com).", "Validasi Input");
                 txtEmail.Focus();
                 return;
+            }
+
+            var existing = _masterList.FirstOrDefault(m => m.NRP.Equals(nrp, StringComparison.OrdinalIgnoreCase));
+            if (existing != null)
+            {
+                var confirmUpdate = MessageBox.Show(
+                    $"Mahasiswa dengan NRP {nrp} sudah terdaftar:\n\nNama: {existing.Nama}\nProdi: {existing.Prodi}\n\nApakah Anda ingin memperbarui data mahasiswa ini?",
+                    "Konfirmasi Perbarui Data",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question
+                );
+
+                if (confirmUpdate == MessageBoxResult.Yes)
+                {
+                    existing.Nama = nama;
+                    existing.Prodi = prodi;
+                    existing.JenisKelamin = jenisKelamin;
+                    existing.TanggalLahir = tglLahir.Value;
+                    existing.Angkatan = angkatan;
+                    existing.JalurMasuk = jalur;
+                    existing.Email = email;
+
+                    RefreshDataView(txtSearch.Text.Trim());
+                    MessageBox.Show(
+                        $"Data mahasiswa '{nama}' (NRP: {nrp}) berhasil diperbarui!",
+                        "Pembaruan Berhasil",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+
+                    ResetForm();
+                    lblStatus.Text = $"Pembaruan berhasil: Data {nama} ({nrp}) telah diperbarui.";
+                    return;
+                }
+                else
+                {
+                    txtNRP.Focus();
+                    return;
+                }
             }
 
             var baru = new Mahasiswa(nrp, nama, prodi, jenisKelamin, tglLahir.Value, angkatan, jalur, email);
@@ -197,6 +229,47 @@ namespace StudentRegistrationApp
         {
             if (dgMahasiswa.SelectedItem is Mahasiswa selected)
             {
+                txtNRP.Text = selected.NRP;
+                txtNama.Text = selected.Nama;
+                txtEmail.Text = selected.Email;
+                dpTanggalLahir.SelectedDate = selected.TanggalLahir;
+
+                foreach (ComboBoxItem item in cmbProdi.Items)
+                {
+                    if (item.Content?.ToString() == selected.Prodi)
+                    {
+                        cmbProdi.SelectedItem = item;
+                        break;
+                    }
+                }
+
+                if (selected.JenisKelamin == "Perempuan")
+                {
+                    rbPerempuan.IsChecked = true;
+                }
+                else
+                {
+                    rbLaki.IsChecked = true;
+                }
+
+                foreach (ComboBoxItem item in cmbAngkatan.Items)
+                {
+                    if (item.Content?.ToString() == selected.Angkatan.ToString())
+                    {
+                        cmbAngkatan.SelectedItem = item;
+                        break;
+                    }
+                }
+
+                foreach (ComboBoxItem item in cmbJalur.Items)
+                {
+                    if (item.Content?.ToString() == selected.JalurMasuk)
+                    {
+                        cmbJalur.SelectedItem = item;
+                        break;
+                    }
+                }
+
                 lblStatus.Text = $"Memilih: {selected.Nama} | NRP: {selected.NRP} | {selected.Prodi} ({selected.Angkatan})";
             }
         }

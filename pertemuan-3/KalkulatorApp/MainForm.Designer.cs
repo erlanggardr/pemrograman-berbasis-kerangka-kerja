@@ -170,7 +170,7 @@ namespace KalkulatorApp
             // Configure styles for Buttons
             ConfigureButton(btnClear, "C", Color.FromArgb(254, 226, 226), Color.FromArgb(220, 38, 38), ClearAll_Click);
             ConfigureButton(btnClearEntry, "CE", Color.FromArgb(241, 245, 249), Color.FromArgb(71, 85, 105), ClearEntry_Click);
-            ConfigureButton(btnBackspace, "⌫", Color.FromArgb(241, 245, 249), Color.FromArgb(71, 85, 105), Backspace_Click);
+            ConfigureButton(btnBackspace, "DEL", Color.FromArgb(241, 245, 249), Color.FromArgb(71, 85, 105), Backspace_Click);
             ConfigureButton(btnDiv, "÷", Color.FromArgb(224, 231, 255), Color.FromArgb(67, 56, 202), OperatorButton_Click, "/");
 
             ConfigureButton(btn7, "7", Color.White, Color.FromArgb(30, 41, 59), NumberButton_Click);
