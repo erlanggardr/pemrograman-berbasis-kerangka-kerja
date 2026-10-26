@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:StudentManagementSystem.ViewModels"
         Title="Student Management System (SMS) - PBKK Pertemuan 5" 
-        Height="780" Width="1240"
-        MinHeight="680" MinWidth="1050"
+        Height="800" Width="1280"
+        MinHeight="700" MinWidth="1100"
         WindowStartupLocation="CenterScreen"
         Background="#F8FAFC"
         FontFamily="Segoe UI">
@@ -13,13 +13,52 @@
         <vm:MainViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <!-- Sidebar Navigation Button Style -->
+        <Style x:Key="SidebarNavButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- KPI Metric Card Style -->
+        <Style x:Key="MetricCardBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,14"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="230"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Left Navigation Sidebar -->
+        <!-- ========================================================= -->
+        <!-- LEFT NAVIGATION SIDEBAR                                   -->
+        <!-- ========================================================= -->
         <Border Grid.Column="0" Background="#0F172A">
             <Grid Margin="16,20">
                 <Grid.RowDefinitions>
@@ -31,10 +70,10 @@
                 <!-- Brand Header -->
                 <StackPanel Grid.Row="0" Margin="0,0,0,24">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Background="#2563EB" CornerRadius="8" Width="36" Height="36" Margin="0,0,10,0">
-                            <TextBlock Text="🎓" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Background="#2563EB" CornerRadius="8" Width="38" Height="38" Margin="0,0,10,0">
+                            <TextBlock Text="🎓" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <StackPanel>
+                        <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="SIMA ITS" FontSize="16" FontWeight="Bold" Foreground="White"/>
                             <TextBlock Text="Student Dashboard" FontSize="11" Foreground="#94A3B8"/>
                         </StackPanel>
@@ -42,20 +81,55 @@
                     <Separator Background="#1E293B" Margin="0,16,0,0"/>
                 </StackPanel>
 
-                <!-- Menu Items -->
+                <!-- Interactive Menu Items -->
                 <StackPanel Grid.Row="1">
-                    <Border Background="#1E293B" CornerRadius="6" Padding="12,10" Margin="0,0,0,6">
-                        <TextBlock Text="📊  Dashboard Utama" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
-                    </Border>
-                    <Border Background="Transparent" CornerRadius="6" Padding="12,10" Margin="0,0,0,6">
-                        <TextBlock Text="👥  Data Mahasiswa" Foreground="#94A3B8" FontSize="13"/>
-                    </Border>
-                    <Border Background="Transparent" CornerRadius="6" Padding="12,10" Margin="0,0,0,6">
-                        <TextBlock Text="📈  Statistik &amp; Laporan" Foreground="#94A3B8" FontSize="13"/>
-                    </Border>
-                    <Border Background="Transparent" CornerRadius="6" Padding="12,10" Margin="0,0,0,6">
-                        <TextBlock Text="🏛️  Program Studi" Foreground="#94A3B8" FontSize="13"/>
-                    </Border>
+                    <!-- Nav Button 1: Dashboard Utama -->
+                    <Button Style="{StaticResource SidebarNavButtonStyle}"
+                            Background="{Binding DashboardNavBackground}"
+                            Foreground="{Binding DashboardNavForeground}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="Dashboard">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📊" FontSize="14" Margin="0,0,10,0"/>
+                            <TextBlock Text="Dashboard Utama" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Nav Button 2: Data Mahasiswa -->
+                    <Button Style="{StaticResource SidebarNavButtonStyle}"
+                            Background="{Binding DataMahasiswaNavBackground}"
+                            Foreground="{Binding DataMahasiswaNavForeground}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="DataMahasiswa">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="👥" FontSize="14" Margin="0,0,10,0"/>
+                            <TextBlock Text="Data Mahasiswa" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Nav Button 3: Statistik & Laporan -->
+                    <Button Style="{StaticResource SidebarNavButtonStyle}"
+                            Background="{Binding StatistikNavBackground}"
+                            Foreground="{Binding StatistikNavForeground}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="Statistik">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📈" FontSize="14" Margin="0,0,10,0"/>
+                            <TextBlock Text="Statistik &amp; Laporan" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Nav Button 4: Program Studi -->
+                    <Button Style="{StaticResource SidebarNavButtonStyle}"
+                            Background="{Binding ProgramStudiNavBackground}"
+                            Foreground="{Binding ProgramStudiNavForeground}"
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="ProgramStudi">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏛️" FontSize="14" Margin="0,0,10,0"/>
+                            <TextBlock Text="Program Studi" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <!-- Footer Sidebar -->
@@ -67,16 +141,17 @@
             </Grid>
         </Border>
 
-        <!-- Main Body Area -->
+        <!-- ========================================================= -->
+        <!-- MAIN CONTENT HOST AREA                                    -->
+        <!-- ========================================================= -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>  <!-- Row 0: Top Header -->
+                <RowDefinition Height="*"/>     <!-- Row 1: Active View Container -->
+                <RowDefinition Height="Auto"/>  <!-- Row 2: Status Bar -->
             </Grid.RowDefinitions>
 
-            <!-- Header Top Bar -->
+            <!-- Top Header Bar -->
             <Border Grid.Row="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="24,14">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -84,80 +159,260 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="Student Management System (SMS)" FontSize="18" FontWeight="Bold" Foreground="#0F172A"/>
-                        <TextBlock Text="Pengelolaan Data Akademik Mahasiswa berbasis Arsitektur MVVM &amp; Data Binding" FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
+                        <TextBlock Text="{Binding CurrentPageTitle}" FontSize="18" FontWeight="Bold" Foreground="#0F172A"/>
+                        <TextBlock Text="{Binding CurrentPageSubtitle}" FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Content="➕ Mahasiswa Baru" Command="{Binding NewCommand}"
+                        <Button Content="➕ Mahasiswa Baru" Command="{Binding NewStudentNavCommand}"
                                 Height="34" Padding="14,0" Background="#2563EB" Foreground="White"
                                 FontWeight="SemiBold" FontSize="12" BorderThickness="0" Cursor="Hand"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- 4 Metric KPI Cards -->
-            <Grid Grid.Row="1" Margin="24,16,24,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="16"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="16"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="16"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Card 1: Total Mahasiswa -->
-                <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="16,14" BorderBrush="#E2E8F0" BorderThickness="1">
+            <!-- ===================================================== -->
+            <!-- VIEW 1: DASHBOARD UTAMA                               -->
+            <!-- ===================================================== -->
+            <ScrollViewer Grid.Row="1" Visibility="{Binding DashboardVisibility}" VerticalScrollBarVisibility="Auto" Padding="24,16">
+                <StackPanel>
+                    <!-- 4 Metric KPI Cards -->
                     <Grid>
-                        <StackPanel>
-                            <TextBlock Text="TOTAL MAHASISWA" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
-                            <TextBlock Text="{Binding TotalStudents}" FontSize="24" FontWeight="Bold" Foreground="#1E3A8A" Margin="0,4,0,0"/>
-                            <TextBlock Text="Terdaftar di database" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <TextBlock Text="👥" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                    </Grid>
-                </Border>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                <!-- Card 2: Rata-Rata IPK -->
-                <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="16,14" BorderBrush="#E2E8F0" BorderThickness="1">
-                    <Grid>
-                        <StackPanel>
-                            <TextBlock Text="RATA-RATA IPK" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
-                            <TextBlock Text="{Binding AverageIPK}" FontSize="24" FontWeight="Bold" Foreground="#D97706" Margin="0,4,0,0"/>
-                            <TextBlock Text="Skala nilai 4.00" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <TextBlock Text="⭐" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                    </Grid>
-                </Border>
+                        <!-- Card 1: Total Mahasiswa -->
+                        <Border Grid.Column="0" Style="{StaticResource MetricCardBorderStyle}">
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="TOTAL MAHASISWA" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding TotalStudents}" FontSize="24" FontWeight="Bold" Foreground="#1E3A8A" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Terdaftar di database" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Text="👥" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
 
-                <!-- Card 3: Mahasiswa Aktif -->
-                <Border Grid.Column="4" Background="White" CornerRadius="8" Padding="16,14" BorderBrush="#E2E8F0" BorderThickness="1">
-                    <Grid>
-                        <StackPanel>
-                            <TextBlock Text="MAHASISWA AKTIF" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
-                            <TextBlock Text="{Binding ActiveStudents}" FontSize="24" FontWeight="Bold" Foreground="#059669" Margin="0,4,0,0"/>
-                            <TextBlock Text="Status perkuliahan aktif" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <TextBlock Text="🟢" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                    </Grid>
-                </Border>
+                        <!-- Card 2: Rata-Rata IPK -->
+                        <Border Grid.Column="2" Style="{StaticResource MetricCardBorderStyle}">
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="RATA-RATA IPK" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding AverageIPK}" FontSize="24" FontWeight="Bold" Foreground="#D97706" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Skala nilai 4.00" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Text="⭐" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
 
-                <!-- Card 4: Cumlaude -->
-                <Border Grid.Column="6" Background="White" CornerRadius="8" Padding="16,14" BorderBrush="#E2E8F0" BorderThickness="1">
-                    <Grid>
-                        <StackPanel>
-                            <TextBlock Text="PREDIKAT CUMLAUDE" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
-                            <TextBlock Text="{Binding CumlaudeStudents}" FontSize="24" FontWeight="Bold" Foreground="#7C3AED" Margin="0,4,0,0"/>
-                            <TextBlock Text="IPK ≥ 3.51 (Dengan Pujian)" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
-                        </StackPanel>
-                        <TextBlock Text="🏆" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                    </Grid>
-                </Border>
-            </Grid>
+                        <!-- Card 3: Mahasiswa Aktif -->
+                        <Border Grid.Column="4" Style="{StaticResource MetricCardBorderStyle}">
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="MAHASISWA AKTIF" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding ActiveStudents}" FontSize="24" FontWeight="Bold" Foreground="#059669" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Status perkuliahan aktif" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Text="🟢" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
 
-            <!-- Main Content Area: Data Table & Form Card -->
-            <Grid Grid.Row="2" Margin="24,16">
+                        <!-- Card 4: Cumlaude -->
+                        <Border Grid.Column="6" Style="{StaticResource MetricCardBorderStyle}">
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="PREDIKAT CUMLAUDE" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding CumlaudeStudents}" FontSize="24" FontWeight="Bold" Foreground="#7C3AED" Margin="0,4,0,0"/>
+                                    <TextBlock Text="IPK ≥ 3.51 (Dengan Pujian)" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Text="🏆" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- Split Content: Top Students & Quick Actions vs Distributions -->
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.4*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Column -->
+                        <StackPanel Grid.Column="0">
+                            <!-- Top Students Card -->
+                            <Border Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,16">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="🏆" FontSize="16" Margin="0,0,8,0"/>
+                                            <TextBlock Text="Mahasiswa Berprestasi Tertinggi (Top IPK)" FontSize="14" FontWeight="Bold" Foreground="#0F172A"/>
+                                        </StackPanel>
+                                        <Button Content="Lihat Data Mahasiswa →" Command="{Binding NavigateCommand}" CommandParameter="DataMahasiswa"
+                                                HorizontalAlignment="Right" Background="Transparent" Foreground="#2563EB" BorderThickness="0"
+                                                FontWeight="SemiBold" FontSize="12" Cursor="Hand"/>
+                                    </Grid>
+
+                                    <!-- Top Students List -->
+                                    <ItemsControl ItemsSource="{Binding TopStudents}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#F8FAFC" CornerRadius="6" Padding="12,10" Margin="0,0,0,8" BorderBrush="#E2E8F0" BorderThickness="1">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Border Grid.Column="0" Background="#EFF6FF" CornerRadius="20" Width="32" Height="32" Margin="0,0,10,0">
+                                                            <TextBlock Text="🎓" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding Nama}" FontWeight="SemiBold" FontSize="13" Foreground="#0F172A"/>
+                                                            <TextBlock FontSize="11" Foreground="#64748B">
+                                                                <Run Text="{Binding NRP}"/>
+                                                                <Run Text=" • "/>
+                                                                <Run Text="{Binding Prodi}"/>
+                                                                <Run Text=" (Angkatan "/>
+                                                                <Run Text="{Binding Angkatan}"/>
+                                                                <Run Text=")"/>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                        <Border Grid.Column="2" Background="#FEF3C7" CornerRadius="4" Padding="10,4" VerticalAlignment="Center">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="IPK " FontSize="11" FontWeight="SemiBold" Foreground="#B45309"/>
+                                                                <TextBlock Text="{Binding IPKFormat}" FontSize="12" FontWeight="Bold" Foreground="#B45309"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Quick Action Navigation Card -->
+                            <Border Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="⚡ Navigasi Cepat &amp; Operasi Sistem" FontSize="14" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,12"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Command="{Binding NavigateCommand}" CommandParameter="DataMahasiswa"
+                                                Height="48" Background="#EFF6FF" BorderBrush="#BFDBFE" BorderThickness="1" Cursor="Hand">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="👥" FontSize="16" Margin="0,0,8,0"/>
+                                                <TextBlock Text="Data Mahasiswa" FontWeight="SemiBold" Foreground="#1D4ED8"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Grid.Column="2" Command="{Binding NavigateCommand}" CommandParameter="Statistik"
+                                                Height="48" Background="#F0FDF4" BorderBrush="#BBF7D0" BorderThickness="1" Cursor="Hand">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="📈" FontSize="16" Margin="0,0,8,0"/>
+                                                <TextBlock Text="Statistik &amp; Laporan" FontWeight="SemiBold" Foreground="#15803D"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Grid.Column="4" Command="{Binding NavigateCommand}" CommandParameter="ProgramStudi"
+                                                Height="48" Background="#FAF5FF" BorderBrush="#E9D5FF" BorderThickness="1" Cursor="Hand">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="🏛️" FontSize="16" Margin="0,0,8,0"/>
+                                                <TextBlock Text="Program Studi" FontWeight="SemiBold" Foreground="#7E22CE"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Right Column: Status & Prodi Distribution -->
+                        <StackPanel Grid.Column="2">
+                            <!-- Status Distribution -->
+                            <Border Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,16">
+                                <StackPanel>
+                                    <TextBlock Text="🟢 Distribusi Status Mahasiswa" FontSize="14" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,12"/>
+                                    <ItemsControl ItemsSource="{Binding StatusStats}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,10">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid Grid.Row="0" Margin="0,0,0,4">
+                                                        <TextBlock Text="{Binding StatusName}" FontSize="12" FontWeight="SemiBold" Foreground="#334155"/>
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                            <TextBlock Text="{Binding Count}" FontSize="12" FontWeight="Bold" Foreground="#0F172A"/>
+                                                            <TextBlock Text=" mhs (" FontSize="12" Foreground="#64748B"/>
+                                                            <TextBlock Text="{Binding PercentageFormat}" FontSize="12" FontWeight="SemiBold" Foreground="#2563EB"/>
+                                                            <TextBlock Text=")" FontSize="12" Foreground="#64748B"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <ProgressBar Grid.Row="1" Value="{Binding Percentage}" Height="6" Minimum="0" Maximum="100"
+                                                                 Background="#F1F5F9" Foreground="#059669" BorderThickness="0"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Prodi Distribution -->
+                            <Border Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <TextBlock Text="🏛️ Distribusi Program Studi" FontSize="14" FontWeight="Bold" Foreground="#0F172A"/>
+                                        <Button Content="Detail →" Command="{Binding NavigateCommand}" CommandParameter="ProgramStudi"
+                                                HorizontalAlignment="Right" Background="Transparent" Foreground="#2563EB" BorderThickness="0"
+                                                FontWeight="SemiBold" FontSize="12" Cursor="Hand"/>
+                                    </Grid>
+                                    <ItemsControl ItemsSource="{Binding ProdiStats}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#F8FAFC" CornerRadius="6" Padding="10,8" Margin="0,0,0,6" BorderBrush="#E2E8F0" BorderThickness="1">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Column="0" Text="{Binding Icon}" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding ProdiName}" FontSize="12" FontWeight="SemiBold" Foreground="#1E293B" VerticalAlignment="Center"/>
+                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Border Background="#EFF6FF" CornerRadius="4" Padding="6,2" Margin="0,0,4,0">
+                                                                <TextBlock Text="{Binding TotalStudents, StringFormat='{}{0} Mhs'}" FontSize="11" FontWeight="Bold" Foreground="#2563EB"/>
+                                                            </Border>
+                                                            <Border Background="#FEF3C7" CornerRadius="4" Padding="6,2">
+                                                                <TextBlock Text="{Binding AverageIPKFormat, StringFormat='{}IPK {0}'}" FontSize="11" FontWeight="SemiBold" Foreground="#B45309"/>
+                                                            </Border>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===================================================== -->
+            <!-- VIEW 2: DATA MAHASISWA (FULL CRUD)                    -->
+            <!-- ===================================================== -->
+            <Grid Grid.Row="1" Visibility="{Binding DataMahasiswaVisibility}" Margin="24,16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
@@ -345,15 +600,349 @@
                 </Border>
             </Grid>
 
-            <!-- Bottom Status Bar -->
-            <Border Grid.Row="3" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="24,8">
+            <!-- ===================================================== -->
+            <!-- VIEW 3: STATISTIK & LAPORAN                           -->
+            <!-- ===================================================== -->
+            <ScrollViewer Grid.Row="1" Visibility="{Binding StatistikVisibility}" VerticalScrollBarVisibility="Auto" Padding="24,16">
+                <StackPanel>
+                    <!-- KPI Banner -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource MetricCardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Text="TOTAL TERDAFTAR" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                <TextBlock Text="{Binding TotalStudents}" FontSize="24" FontWeight="Bold" Foreground="#1E3A8A" Margin="0,4,0,0"/>
+                                <TextBlock Text="Mahasiswa aktif &amp; alumni" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Style="{StaticResource MetricCardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Text="RATA-RATA IPK KAMPUS" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                <TextBlock Text="{Binding AverageIPK}" FontSize="24" FontWeight="Bold" Foreground="#D97706" Margin="0,4,0,0"/>
+                                <TextBlock Text="Indeks Prestasi Kumulatif" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="4" Style="{StaticResource MetricCardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Text="MAHASISWA AKTIF" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                <TextBlock Text="{Binding ActiveStudents}" FontSize="24" FontWeight="Bold" Foreground="#059669" Margin="0,4,0,0"/>
+                                <TextBlock Text="Mengikuti perkuliahan" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="6" Style="{StaticResource MetricCardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Text="MAHASISWA CUMLAUDE" FontSize="10" FontWeight="Bold" Foreground="#64748B"/>
+                                <TextBlock Text="{Binding CumlaudeStudents}" FontSize="24" FontWeight="Bold" Foreground="#7C3AED" Margin="0,4,0,0"/>
+                                <TextBlock Text="Dengan pujian (IPK ≥ 3.51)" FontSize="11" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Distributions Section -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Predikat Distribution -->
+                        <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="🏆 Distribusi Predikat Kelulusan (IPK)" FontSize="14" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,14"/>
+                                <ItemsControl ItemsSource="{Binding PredikatStats}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,12">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding PredikatName}" FontSize="12" FontWeight="Bold" Foreground="#1E293B"/>
+                                                        <TextBlock Text=" (" FontSize="11" Foreground="#64748B"/>
+                                                        <TextBlock Text="{Binding Kriteria}" FontSize="11" Foreground="#64748B"/>
+                                                        <TextBlock Text=")" FontSize="11" Foreground="#64748B"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBlock Text="{Binding Count}" FontSize="12" FontWeight="Bold" Foreground="#0F172A"/>
+                                                        <TextBlock Text=" mhs (" FontSize="12" Foreground="#64748B"/>
+                                                        <TextBlock Text="{Binding PercentageFormat}" FontSize="12" FontWeight="SemiBold" Foreground="#2563EB"/>
+                                                        <TextBlock Text=")" FontSize="12" Foreground="#64748B"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <ProgressBar Grid.Row="1" Value="{Binding Percentage}" Height="7" Minimum="0" Maximum="100"
+                                                             Background="#F1F5F9" Foreground="#7C3AED" BorderThickness="0"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Status Distribution -->
+                        <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="📊 Status Perkuliahan &amp; Kelulusan" FontSize="14" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,14"/>
+                                <ItemsControl ItemsSource="{Binding StatusStats}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,12">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid Grid.Row="0" Margin="0,0,0,4">
+                                                    <TextBlock Text="{Binding StatusName}" FontSize="12" FontWeight="Bold" Foreground="#1E293B"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBlock Text="{Binding Count}" FontSize="12" FontWeight="Bold" Foreground="#0F172A"/>
+                                                        <TextBlock Text=" orang (" FontSize="12" Foreground="#64748B"/>
+                                                        <TextBlock Text="{Binding PercentageFormat}" FontSize="12" FontWeight="SemiBold" Foreground="#059669"/>
+                                                        <TextBlock Text=")" FontSize="12" Foreground="#64748B"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <ProgressBar Grid.Row="1" Value="{Binding Percentage}" Height="7" Minimum="0" Maximum="100"
+                                                             Background="#F1F5F9" Foreground="#059669" BorderThickness="0"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Table Rekapitulasi Performa per Prodi -->
+                    <Border Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,16">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="🏛️ Rekapitulasi Kinerja &amp; Rata-Rata IPK Program Studi" FontSize="14" FontWeight="Bold" Foreground="#0F172A"/>
+                                <Button Content="Salin Ringkasan Laporan 📋" Command="{Binding CopyReportCommand}"
+                                        HorizontalAlignment="Right" Background="#EFF6FF" Foreground="#1D4ED8"
+                                        BorderBrush="#BFDBFE" BorderThickness="1" FontWeight="SemiBold"
+                                        FontSize="12" Padding="12,4" Cursor="Hand"/>
+                            </Grid>
+
+                            <DataGrid ItemsSource="{Binding ProdiStats}"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      IsReadOnly="True"
+                                      GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#F1F5F9"
+                                      RowHeight="36"
+                                      FontSize="12"
+                                      BorderThickness="1"
+                                      BorderBrush="#E2E8F0"
+                                      Background="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Program Studi" Binding="{Binding ProdiName}" Width="200" FontWeight="SemiBold"/>
+                                    <DataGridTextColumn Header="Total Mahasiswa" Binding="{Binding TotalStudents}" Width="110"/>
+                                    <DataGridTextColumn Header="Rata-Rata IPK" Binding="{Binding AverageIPKFormat}" Width="100" FontWeight="Bold"/>
+                                    <DataGridTextColumn Header="Aktif" Binding="{Binding ActiveCount}" Width="70"/>
+                                    <DataGridTextColumn Header="Cuti" Binding="{Binding CutiCount}" Width="70"/>
+                                    <DataGridTextColumn Header="Lulus" Binding="{Binding LulusCount}" Width="70"/>
+                                    <DataGridTextColumn Header="Cumlaude" Binding="{Binding CumlaudeCount}" Width="85"/>
+                                    <DataGridTextColumn Header="% Total" Binding="{Binding PercentageFormat}" Width="80"/>
+                                    <DataGridTextColumn Header="Mahasiswa Berprestasi" Binding="{Binding TopStudentName}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===================================================== -->
+            <!-- VIEW 4: PROGRAM STUDI                                 -->
+            <!-- ===================================================== -->
+            <Grid Grid.Row="1" Visibility="{Binding ProgramStudiVisibility}" Margin="24,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="380"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Column: Daftar Program Studi -->
+                <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="16" BorderBrush="#E2E8F0" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Margin="0,0,0,12">
+                            <TextBlock Text="🏛️ Direktori Program Studi" FontSize="14" FontWeight="Bold" Foreground="#0F172A"/>
+                            <TextBlock Text="Pilih prodi untuk melihat profil &amp; daftar mahasiswanya" FontSize="11" Foreground="#64748B" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <!-- ItemsControl of Prodi Cards -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding ProdiStats}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#F8FAFC" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid Grid.Row="0">
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Icon}" FontSize="16" Margin="0,0,8,0"/>
+                                                        <TextBlock Text="{Binding ProdiName}" FontWeight="Bold" FontSize="13" Foreground="#0F172A"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <Grid Grid.Row="1" Margin="0,8,0,10">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="TOTAL MHS" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                                        <TextBlock Text="{Binding TotalStudents}" FontSize="14" FontWeight="Bold" Foreground="#2563EB"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="1">
+                                                        <TextBlock Text="RATA IPK" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                                        <TextBlock Text="{Binding AverageIPKFormat}" FontSize="14" FontWeight="Bold" Foreground="#D97706"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="2">
+                                                        <TextBlock Text="CUMLAUDE" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                                        <TextBlock Text="{Binding CumlaudeCount}" FontSize="14" FontWeight="Bold" Foreground="#7C3AED"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <Button Grid.Row="2" Content="Pilih &amp; Tinjau Mahasiswa →"
+                                                        Command="{Binding DataContext.SelectProdiCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"
+                                                        Height="28" Background="#EFF6FF" Foreground="#1D4ED8"
+                                                        BorderBrush="#BFDBFE" BorderThickness="1" FontSize="11"
+                                                        FontWeight="SemiBold" Cursor="Hand"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+                <!-- Right Column: Detail Prodi Terpilih & Data Mahasiswa -->
+                <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="18" BorderBrush="#E2E8F0" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header Detail Prodi -->
+                        <Grid Grid.Row="0" Margin="0,0,0,14">
+                            <StackPanel VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding SelectedProdi.Icon}" FontSize="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding SelectedProdi.ProdiName}" FontSize="16" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Text="Daftar mahasiswa terdaftar di program studi ini" FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Button Grid.Row="0" Content="➕ Tambah Mahasiswa di Prodi Ini"
+                                    Command="{Binding NewForSelectedProdiCommand}"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Height="32" Padding="12,0" Background="#2563EB" Foreground="White"
+                                    FontWeight="SemiBold" FontSize="12" BorderThickness="0" Cursor="Hand"/>
+                        </Grid>
+
+                        <!-- Mini KPI Cards for Selected Prodi -->
+                        <Grid Grid.Row="1" Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="1.4*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="#F8FAFC" CornerRadius="6" Padding="10,8" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="TOTAL MHS" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding SelectedProdi.TotalStudents}" FontSize="16" FontWeight="Bold" Foreground="#1E3A8A"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="#F8FAFC" CornerRadius="6" Padding="10,8" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="RATA-RATA IPK" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding SelectedProdi.AverageIPKFormat}" FontSize="16" FontWeight="Bold" Foreground="#D97706"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="4" Background="#F8FAFC" CornerRadius="6" Padding="10,8" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="MAHASISWA AKTIF" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding SelectedProdi.ActiveCount}" FontSize="16" FontWeight="Bold" Foreground="#059669"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="6" Background="#F8FAFC" CornerRadius="6" Padding="10,8" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="TOP STUDENT" FontSize="9" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding SelectedProdi.TopStudentName}" FontSize="12" FontWeight="Bold" Foreground="#7C3AED" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- Student DataGrid for Selected Prodi -->
+                        <Border Grid.Row="2" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="6">
+                            <DataGrid ItemsSource="{Binding SelectedProdiStudents}"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single"
+                                      GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#F1F5F9"
+                                      RowHeight="34"
+                                      FontSize="12"
+                                      BorderThickness="0"
+                                      Background="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="NRP" Binding="{Binding NRP}" Width="105" FontWeight="SemiBold"/>
+                                    <DataGridTextColumn Header="Nama Lengkap" Binding="{Binding Nama}" Width="170"/>
+                                    <DataGridTextColumn Header="Angkatan" Binding="{Binding Angkatan}" Width="75"/>
+                                    <DataGridTextColumn Header="IPK" Binding="{Binding IPKFormat}" Width="60" FontWeight="Bold"/>
+                                    <DataGridTextColumn Header="Predikat" Binding="{Binding Predikat}" Width="135"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="75"/>
+                                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ===================================================== -->
+            <!-- BOTTOM STATUS BAR                                     -->
+            <!-- ===================================================== -->
+            <Border Grid.Row="2" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="24,8">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#475569"/>
-                    <TextBlock Grid.Column="1" Text="MVVM WPF .NET 10" FontSize="12" Foreground="#94A3B8"/>
+                    <TextBlock Grid.Column="1" Text="SIMA ITS • MVVM WPF .NET 10" FontSize="12" Foreground="#94A3B8"/>
                 </Grid>
             </Border>
         </Grid>

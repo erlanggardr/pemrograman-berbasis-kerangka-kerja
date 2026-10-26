@@ -16,21 +16,24 @@ Pola arsitektur **MVVM** memisahkan kode antarmuka (*UI Presentation*) secara mu
 * **View (`Views/MainWindow.xaml`)**: Menyajikan antarmuka visual modern berbasis *Rich UI* yang hanya berkomunikasi dengan ViewModel melalui mekanisme XAML Data Binding tanpa penulisan logika bisnis di file *code-behind*.
 
 Fitur utama yang dihadirkan meliputi:
-1. **Dashboard Statistik Dinamis (KPI Cards)**:
+1. **Navigasi Multi-View Interaktif (Sidebar Navigation)**:
+   * **📊 Dashboard Utama**: Ringkasan KPI akademik, daftar mahasiswa berprestasi tertinggi (*Top IPK*), distribusi status perkuliahan, dan shortcut navigasi cepat.
+   * **👥 Data Mahasiswa**: Ruang kerja manajemen data lengkap dengan tabel DataGrid, pencarian real-time, multi-filter (Prodi & Status), dan formulir CRUD dua arah (*Two-Way Data Binding*).
+   * **📈 Statistik & Laporan**: Visualisasi analitik distribusi predikat kelulusan (*Cumlaude*, Sangat Memuaskan, Memuaskan, Cukup) dengan indikator *progress bar*, tabel rekapitulasi kinerja prodi, dan tombol ekspor salin laporan akademik ke *clipboard*.
+   * **🏛️ Program Studi**: Direktori profil program studi interaktif dengan kartu metrik per departemen dan daftar mahasiswa khusus pada prodi terpilih.
+2. **Dashboard Statistik Dinamis (KPI Cards)**:
    * **Total Mahasiswa**: Jumlah total mahasiswa terdaftar.
    * **Rata-Rata IPK**: Kalkulasi rata-rata indeks prestasi kumulatif mahasiswa skala 4.00.
    * **Mahasiswa Aktif**: Penghitungan jumlah mahasiswa dengan status akademik aktif.
    * **Predikat Cumlaude**: Jumlah mahasiswa yang memiliki IPK $\ge 3.51$.
-2. **Operasi Lengkap CRUD (*Create, Read, Update, Delete*)**:
+3. **Operasi Lengkap CRUD (*Create, Read, Update, Delete*)**:
    * **Create**: Menambah mahasiswa baru dengan validasi format angka, keunikan NRP, dan batas IPK.
    * **Read**: Menampilkan seluruh data mahasiswa pada tabel DataGrid dengan visualisasi status badge dan predikat.
    * **Update**: Memilih data mahasiswa dari tabel untuk dimuat otomatis ke formulir dalam mode pengeditan, lalu menyimpan pembaruan.
    * **Delete**: Menghapus data mahasiswa dari sistem dengan dialog konfirmasi keamanan.
-3. **Pencarian & Penyaringan Real-Time**:
+4. **Pencarian & Penyaringan Real-Time**:
    * Filter teks berdasarkan kata kunci Nama, NRP, atau Email.
    * Filter bertingkat berdasarkan dropdown Program Studi dan Status Akademik (Aktif, Cuti, Lulus).
-4. **Navigasi Sidebar Modern**:
-   * Tampilan sidebar bergaya *dashboard enterprise* bertema slate gelap dengan ikon navigasi intuitif.
 
 ---
 
@@ -44,13 +47,14 @@ pertemuan-5/
 │   ├── App.xaml                            # Deklarasi startup aplikasi
 │   ├── App.xaml.cs                         # Kode bootstrap aplikasi WPF
 │   ├── Models/
-│   │   └── Student.cs                      # Model entitas Mahasiswa (turunan ViewModelBase / INotifyPropertyChanged)
+│   │   ├── Student.cs                      # Model entitas Mahasiswa (turunan ViewModelBase)
+│   │   └── StatisticsModels.cs             # Model statistik Prodi, Predikat, & Status
 │   ├── ViewModels/
 │   │   ├── ViewModelBase.cs                # Kelas basis pengimplementasi INotifyPropertyChanged
 │   │   ├── RelayCommand.cs                 # Implementasi antarmuka ICommand untuk aksi tombol
-│   │   └── MainViewModel.cs                # State manager, logika CRUD, filter, & metrik dashboard
+│   │   └── MainViewModel.cs                # State manager, navigasi multi-view, CRUD, & statistik
 │   └── Views/
-│       ├── MainWindow.xaml                 # Desain antarmuka XAML berbasis data binding murni
+│       ├── MainWindow.xaml                 # Desain antarmuka XAML multi-view (MVVM)
 │       └── MainWindow.xaml.cs              # Code-behind minimalis (hanya inisialisasi DataContext)
 ├── screenshots/                            # Tangkapan layar bukti eksekusi fitur aplikasi
 │   ├── 01_dashboard_utama.png
@@ -59,7 +63,9 @@ pertemuan-5/
 │   ├── 04_edit_mahasiswa_mvvm.png
 │   ├── 05_hapus_mahasiswa_mvvm.png
 │   ├── 06_pencarian_filter_mahasiswa.png
-│   └── 07_statistik_ringkasan_data.png
+│   ├── 07_statistik_ringkasan_data.png
+│   ├── 08_statistik_laporan_view.png
+│   └── 09_program_studi_view.png
 └── README.md                               # Laporan & dokumentasi pengerjaan praktikum
 ```
 
@@ -225,6 +231,22 @@ Berikut adalah dokumentasi tangkapan layar bukti eksekusi seluruh fitur pada apl
 
 ---
 
+### 📸 Slot Screenshot 8: Tampilan Modul Statistik & Laporan Akademik
+> Lokasi file: `screenshots/08_statistik_laporan_view.png`
+
+![Statistik dan Laporan](screenshots/08_statistik_laporan_view.png)
+*Gambar 8: Tampilan lengkap modul Statistik & Laporan dengan visualisasi progress bar distribusi IPK/predikat, status perkuliahan, tabel rekapitulasi performa per prodi, dan tombol ekspor clipboard.*
+
+---
+
+### 📸 Slot Screenshot 9: Tampilan Modul Program Studi & Direktori Mahasiswa
+> Lokasi file: `screenshots/09_program_studi_view.png`
+
+![Direktori Program Studi](screenshots/09_program_studi_view.png)
+*Gambar 9: Tampilan direktori Program Studi interaktif yang menyajikan kartu metrik per departemen dan tabel rincian mahasiswa pada program studi yang dipilih.*
+
+---
+
 ## 💡 Petunjuk Menambahkan Screenshot Anda Sendiri
 1. Jalankan aplikasi melalui terminal dengan perintah: `dotnet run --project StudentManagementSystem`.
 2. Lakukan pengujian dashboard, manipulasi CRUD data, pencarian, dan pemfilteran program studi.
@@ -237,4 +259,6 @@ Berikut adalah dokumentasi tangkapan layar bukti eksekusi seluruh fitur pada apl
    * `05_hapus_mahasiswa_mvvm.png`
    * `06_pencarian_filter_mahasiswa.png`
    * `07_statistik_ringkasan_data.png`
+   * `08_statistik_laporan_view.png`
+   * `09_program_studi_view.png`
 5. Lakukan git commit lokal untuk menyimpan riwayat dokumentasi Anda.
