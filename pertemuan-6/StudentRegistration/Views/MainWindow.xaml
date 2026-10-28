@@ -9,10 +9,6 @@
         Background="#F8FAFC"
         FontFamily="Segoe UI">
 
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
-
     <Window.Resources>
         <!-- KPI Metric Card Style -->
         <Style x:Key="MetricCardBorderStyle" TargetType="Border">

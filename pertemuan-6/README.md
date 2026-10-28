@@ -350,13 +350,13 @@ dotnet run --project StudentRegistration
 
 Berikut adalah dokumentasi tangkapan layar bukti eksekusi seluruh tahapan pada Hands-On Lab 1 dan Hands-On Lab 2:
 
-### 📸 BAGIAN I: HANDS-ON LAB 1 (SQL SERVER & SSMS)
+### 📸 BAGIAN I: HANDS-ON LAB 1 (SQL SERVER LOCALDB)
 
 #### 1. Slot Screenshot 1: Koneksi Berhasil ke SQL Server
 > Lokasi file: `screenshots/01_sql_server_connection.png`
 
 ![Koneksi SQL Server](screenshots/01_sql_server_connection.png)
-*Gambar 1: Tampilan dialog Object Explorer di SQL Server Management Studio (SSMS) yang berhasil terhubung ke server database.*
+*Gambar 1: Koneksi berhasil ke SQL Server LocalDB (`(localdb)MSSQLLocalDB`) dengan Windows Authentication, dijalankan lewat PowerShell + ADO.NET karena SSMS tidak terpasang.*
 
 ---
 
